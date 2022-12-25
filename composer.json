@@ -1,0 +1,22 @@
+{
+    "name": "queents/console-helpers",
+    "autoload": {
+        "psr-4": {
+            "Queents\\ConsoleHelpers\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Queents\\ConsoleHelpers\\ConsoleHelpersServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "Fady Mondy",
+            "email": "EngFadyMondy@gmail.com"
+        }
+    ],
+    "require": {}
+}
