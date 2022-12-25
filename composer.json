@@ -1,5 +1,14 @@
 {
     "name": "queents/console-helpers",
+    "description": "tons of helper you need for you artisan command line application",
+    "keywords": [
+        "console",
+        "helpers",
+        "artisan",
+        "command",
+        "line",
+        "application"
+    ],
     "autoload": {
         "psr-4": {
             "Queents\\ConsoleHelpers\\": "src/"
