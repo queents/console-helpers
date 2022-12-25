@@ -1,6 +1,7 @@
 {
     "name": "queents/console-helpers",
     "description": "tons of helper you need for you artisan command line application",
+    "license": "MIT",
     "keywords": [
         "console",
         "helpers",
