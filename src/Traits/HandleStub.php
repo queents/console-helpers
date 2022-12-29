@@ -15,7 +15,7 @@ trait HandleStub
      * @param array $directory
      * @return void
      */
-    protected function generateStubs(string $from, string $to, array $replacements, array $directory=[]): void
+    protected function generateStubs(string $from, string $to, array $replacements, array $directory=[], bool $append=false): void
     {
         if(File::exists($from)){
             $stubValue = File::get($from);
@@ -32,11 +32,19 @@ trait HandleStub
                 }
             }
 
-            if(File::exists($to)){
+            if(File::exists($to) && !$append){
                 File::delete($to);
             }
 
-            File::put($to, $convertStubToText);
+            if($append){
+                $content = File::get($to);
+                if(strpos($content, $convertStubToText) === false){
+                    File::append($to, $convertStubToText);
+                }
+            }
+            else {
+                File::put($to, $convertStubToText);
+            }
         }
     }
 }
