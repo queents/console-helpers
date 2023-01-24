@@ -54,10 +54,70 @@ trait RunCommand
 
     /**
      * @param array $command
+     * @param bool|null $withOutput
      * @return void
      */
-    public function artisanCommand(array $command): void
+    public function artisanCommand(array $command, bool|null $withOutput=false): void
     {
-        $this->phpCommand(array_merge(['artisan'], $command));
+        $this->phpCommand(array_merge(['artisan'], $command), $withOutput);
+    }
+
+
+    /**
+     * Installs the given Composer Packages into the application.
+     *
+     * @param  mixed  $packages
+     * @param bool|null $withOutput
+     * @return void
+     */
+    protected function requireComposerPackages(mixed $packages, bool|null $withOutput=false): void
+    {
+        $composer = $this->option('composer');
+
+        if ($composer !== 'global') {
+            $command = [$this->phpBinary(), $composer, 'require'];
+        }
+
+        $command = array_merge(
+            $command ?? ['composer', 'require'],
+            is_array($packages) ? $packages : func_get_args()
+        );
+
+        (new Process($command, base_path(), ['COMPOSER_MEMORY_LIMIT' => '-1']))
+            ->setTimeout(null)
+            ->run(function ($type, $output) use ($withOutput) {
+                if($withOutput){
+                    $this->output->write($output);
+                }
+            });
+    }
+
+    /**
+     * Install the given Composer Packages as "dev" dependencies.
+     *
+     * @param  mixed  $packages
+     * @param bool|null $withOutput
+     * @return void
+     */
+    protected function requireComposerDevPackages(mixed $packages, bool|null $withOutput=false): void
+    {
+        $composer = $this->option('composer');
+
+        if ($composer !== 'global') {
+            $command = [$this->phpBinary(), $composer, 'require', '--dev'];
+        }
+
+        $command = array_merge(
+            $command ?? ['composer', 'require', '--dev'],
+            is_array($packages) ? $packages : func_get_args()
+        );
+
+        (new Process($command, base_path(), ['COMPOSER_MEMORY_LIMIT' => '-1']))
+            ->setTimeout(null)
+            ->run(function ($type, $output) use ($withOutput) {
+                if($withOutput){
+                    $this->output->write($output);
+                }
+            });
     }
 }
