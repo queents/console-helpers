@@ -18,29 +18,37 @@ trait RunCommand
         return (new PhpExecutableFinder())->find(false) ?: 'php';
     }
 
-    /**
-     * @param array $commands
-     * @return void
-     */
-    public function phpCommand(array $commands): void
-    {
-        (new Process(array_merge([$this->phpBinary()], $commands), base_path(), ['COMPOSER_MEMORY_LIMIT' => '-1']))
-            ->setTimeout(null)
-            ->run(function ($type, $output) {
-                $this->output->write($output);
-            });
-    }
 
     /**
      * @param array $commands
+     * @param bool|null $useOutput
      * @return void
      */
-    public function yarnCommand(array $commands): void
+    public function phpCommand(array $commands, bool|null $useOutput=false): void
+    {
+        (new Process(array_merge([$this->phpBinary()], $commands), base_path(), ['COMPOSER_MEMORY_LIMIT' => '-1']))
+            ->setTimeout(null)
+            ->run(function ($type, $output) use ($useOutput) {
+                if($useOutput){
+                    $this->output->write($output);
+                }
+            });
+    }
+
+
+    /**
+     * @param array $commands
+     * @param bool|null $withOutput
+     * @return void
+     */
+    public function yarnCommand(array $commands, bool|null $withOutput=false): void
     {
         (new Process(array_merge([config('console-helpers.yarn-path')], $commands), base_path(), ['COMPOSER_MEMORY_LIMIT' => '-1']))
             ->setTimeout(null)
-            ->run(function ($type, $output) {
-                $this->output->write($output);
+            ->run(function ($type, $output) use ($withOutput) {
+                if($withOutput){
+                    $this->output->write($output);
+                }
             });
     }
 
