@@ -72,12 +72,6 @@ trait RunCommand
      */
     protected function requireComposerPackages(mixed $packages, bool|null $withOutput=false): void
     {
-        $composer = $this->option('composer');
-
-        if ($composer !== 'global') {
-            $command = [$this->phpBinary(), $composer, 'require'];
-        }
-
         $command = array_merge(
             $command ?? ['composer', 'require'],
             is_array($packages) ? $packages : func_get_args()
@@ -101,11 +95,6 @@ trait RunCommand
      */
     protected function requireComposerDevPackages(mixed $packages, bool|null $withOutput=false): void
     {
-        $composer = $this->option('composer');
-
-        if ($composer !== 'global') {
-            $command = [$this->phpBinary(), $composer, 'require', '--dev'];
-        }
 
         $command = array_merge(
             $command ?? ['composer', 'require', '--dev'],
